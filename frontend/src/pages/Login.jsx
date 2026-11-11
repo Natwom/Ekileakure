@@ -36,9 +36,12 @@ export default function Login() {
         <div className="pointer-events-none absolute -top-24 -right-24 h-72 w-72 rounded-full bg-primary-500/20 blur-3xl" />
         <div className="pointer-events-none absolute -bottom-32 -left-16 h-80 w-80 rounded-full bg-emerald-400/10 blur-3xl" />
 
-        <div className="relative">
-          <p className="text-2xl font-bold tracking-tight">EkileAkure</p>
-          <p className="mt-1 text-sm text-slate-400">Business Management System</p>
+        <div className="relative flex items-center gap-3">
+          <img src="/logo.svg" alt="EkileAkure logo" className="h-12 w-12 rounded-xl ring-1 ring-white/20" />
+          <div>
+            <p className="text-2xl font-bold tracking-tight">EkileAkure</p>
+            <p className="text-sm text-slate-400">Business Management System</p>
+          </div>
         </div>
 
         <div className="relative">
@@ -73,9 +76,12 @@ export default function Login() {
       {/* Form panel */}
       <div className="flex items-center justify-center p-6">
         <div className="w-full max-w-sm">
-          <div className="mb-8 lg:hidden">
-            <p className="text-2xl font-bold text-navy">EkileAkure</p>
-            <p className="text-sm text-slate-500">One Business. Complete Control.</p>
+          <div className="mb-8 flex items-center gap-3 lg:hidden">
+            <img src="/logo.svg" alt="EkileAkure logo" className="h-11 w-11 rounded-xl" />
+            <div>
+              <p className="text-2xl font-bold text-navy">EkileAkure</p>
+              <p className="text-sm text-slate-500">One Business. Complete Control.</p>
+            </div>
           </div>
 
           <div className="card p-8 shadow-lg">
