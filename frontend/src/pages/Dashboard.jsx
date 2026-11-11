@@ -387,7 +387,10 @@ export default function Dashboard() {
           style={{ backgroundImage: 'radial-gradient(#fff 1px, transparent 1px)', backgroundSize: '22px 22px' }} />
 
         <div className="relative px-6 py-6 lg:px-8 flex flex-wrap items-center gap-6 justify-between">
-          <div>
+          <div className="flex items-center gap-5">
+            <img src="/logo.svg" alt="EkileAkure logo"
+              className="hidden sm:block h-16 w-16 shrink-0 rounded-2xl ring-1 ring-white/20 shadow-lg shadow-black/20" />
+            <div>
             <p className="inline-flex items-center gap-2 text-xs font-medium uppercase tracking-widest text-slate-400">
               <CalendarDays size={13} /> {today}
             </p>
@@ -406,6 +409,7 @@ export default function Dashboard() {
               </span>
               Live · updated {clock(updatedAt)} · auto-refreshes every minute
             </p>
+            </div>
           </div>
 
           <div className="flex flex-wrap items-center gap-2.5">
