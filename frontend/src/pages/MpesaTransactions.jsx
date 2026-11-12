@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
-import { ArrowDownLeft, ArrowUpRight, Undo2, X, Wallet, Banknote, TrendingUp, Search, AlertTriangle } from 'lucide-react'
+import { Link } from 'react-router-dom'
+import { ArrowDownLeft, ArrowUpRight, Undo2, X, Search, AlertTriangle, Scale } from 'lucide-react'
 import Badge from '../components/Badge'
 import DataTable from '../components/DataTable'
 import { mpesaApi } from '../api'
@@ -14,28 +15,7 @@ const when = (d) =>
 
 const cap = (s) => (s ? s.charAt(0).toUpperCase() + s.slice(1) : '')
 
-const tiles = {
-  blue: 'bg-blue-50 text-blue-600',
-  amber: 'bg-amber-50 text-amber-600',
-  green: 'bg-emerald-50 text-emerald-600',
-}
-
 const blankForm = { reference: '', amount: '', commission: '', customer_phone: '' }
-
-function Kpi({ icon: Icon, label, value, sub, tone }) {
-  return (
-    <div className="rounded-2xl bg-white border border-slate-200 p-5 shadow-sm">
-      <div className="flex items-start justify-between">
-        <p className="text-sm text-slate-500">{label}</p>
-        <span className={`h-9 w-9 rounded-lg flex items-center justify-center ${tiles[tone]}`}>
-          <Icon size={18} />
-        </span>
-      </div>
-      <p className="text-2xl font-bold tracking-tight text-navy mt-3">{value}</p>
-      <p className="text-xs text-slate-500 mt-1">{sub}</p>
-    </div>
-  )
-}
 
 function Segmented({ value, onChange, options }) {
   return (
@@ -151,7 +131,6 @@ export default function MpesaTransactions() {
   const { user } = useAuth()
   const canReverse = ['owner', 'manager'].includes(user.role)
   const [txns, setTxns] = useState([])
-  const [state, setState] = useState(null)
   const [type, setType] = useState('deposit')
   const [form, setForm] = useState(blankForm)
   const [msg, setMsg] = useState({ type: '', text: '' })
@@ -165,7 +144,6 @@ export default function MpesaTransactions() {
     mpesaApi.transactions()
       .then((r) => { setTxns(r.data); setLoaded(true) })
       .catch((err) => setMsg({ type: 'error', text: errorText(err, 'Failed to load transactions') }))
-    mpesaApi.state().then((r) => setState(r.data)).catch(() => {})
   }
   useEffect(() => { load() }, [])
 
@@ -223,24 +201,18 @@ export default function MpesaTransactions() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div>
-        <h1 className="text-2xl font-bold text-navy">M-Pesa Transactions</h1>
-        <p className="text-sm text-slate-500 mt-0.5">
-          A deposit lowers float and raises cash. A withdrawal does the opposite. Only commission counts as income.
-        </p>
-      </div>
-
-      {/* Balances */}
-      {state && (
-        <div className="grid sm:grid-cols-3 gap-4">
-          <Kpi icon={Wallet} tone="blue" label="Current float" value={fmt(state.current_float)}
-            sub={`Opened the day with ${fmt(state.opening_float)}`} />
-          <Kpi icon={Banknote} tone="amber" label="Physical cash" value={fmt(state.current_cash)}
-            sub={`Opened the day with ${fmt(state.opening_cash)}`} />
-          <Kpi icon={TrendingUp} tone="green" label="Commission today" value={fmt(state.today_commission)}
-            sub={`Deposits ${fmt(state.today_deposits)}, withdrawals ${fmt(state.today_withdrawals)}`} />
+      <div className="flex flex-wrap items-end justify-between gap-3">
+        <div>
+          <h1 className="text-2xl font-bold text-navy">M-Pesa Transactions</h1>
+          <p className="text-sm text-slate-500 mt-0.5">
+            A deposit lowers float and raises cash. A withdrawal does the opposite. Only commission counts as income.
+          </p>
         </div>
-      )}
+        <Link to="/mpesa-float"
+          className="inline-flex items-center gap-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 px-3.5 py-2 text-sm font-medium transition-colors">
+          <Scale size={16} /> Cash and Float
+        </Link>
+      </div>
 
       {/* Message */}
       {msg.text && (
