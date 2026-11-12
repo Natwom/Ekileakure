@@ -1,4 +1,5 @@
-from sqlalchemy import Column, Integer, String, Numeric, DateTime, ForeignKey, Enum, UniqueConstraint
+from sqlalchemy import (Column, Integer, String, Numeric, DateTime, Date, Boolean, Text,
+                        ForeignKey, Enum, UniqueConstraint)
 from sqlalchemy.orm import relationship
 from datetime import datetime, timezone
 import enum
@@ -52,3 +53,35 @@ class CashLedger(Base):
     closing_cash = Column(Numeric(14, 2), nullable=False)
     status = Column(String(20), default="open")
     closed_by = Column(Integer, ForeignKey("users.id"))
+
+
+class CapitalSettings(Base):
+    """Starting M-Pesa capital. Float + cash should always add up to this
+    (plus commission, if it is paid into float)."""
+    __tablename__ = "capital_settings"
+    id = Column(Integer, primary_key=True)
+    starting_capital = Column(Numeric(14, 2), nullable=False)
+    opening_float = Column(Numeric(14, 2), nullable=False)
+    opening_cash = Column(Numeric(14, 2), nullable=False)
+    commission_in_float = Column(Boolean, default=True)
+    set_by = Column(Integer, ForeignKey("users.id"))
+    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
+
+
+class DailyReconciliation(Base):
+    __tablename__ = "daily_reconciliations"
+    id = Column(Integer, primary_key=True)
+    business_date = Column(Date, unique=True, nullable=False, index=True)
+    opening_float = Column(Numeric(14, 2), nullable=False)
+    opening_cash = Column(Numeric(14, 2), nullable=False)
+    commission = Column(Numeric(14, 2), default=0)
+    expected_float = Column(Numeric(14, 2), nullable=False)
+    expected_cash = Column(Numeric(14, 2), nullable=False)
+    counted_float = Column(Numeric(14, 2), nullable=False)
+    counted_cash = Column(Numeric(14, 2), nullable=False)
+    float_variance = Column(Numeric(14, 2), nullable=False)   # counted - expected
+    cash_variance = Column(Numeric(14, 2), nullable=False)
+    total_variance = Column(Numeric(14, 2), nullable=False)   # negative = shortage
+    note = Column(Text)
+    closed_by = Column(Integer, ForeignKey("users.id"))
+    closed_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))

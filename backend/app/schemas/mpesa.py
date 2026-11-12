@@ -33,3 +33,9 @@ class DayClose(BaseModel):
     closing_cash: Decimal
     other_in: Decimal = Decimal("0")
     other_out: Decimal = Decimal("0")
+    note: Optional[str] = None
+
+class CapitalSetup(BaseModel):
+    opening_float: Decimal
+    opening_cash: Decimal
+    commission_in_float: bool = True

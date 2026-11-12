@@ -37,6 +37,9 @@ export const mpesaApi = {
   reverse: (id, reason) => client.post(`/mpesa/transactions/${id}/reverse`, null, { params: { reason } }),
   state: () => client.get('/mpesa/state'),
   closeDay: (data) => client.post('/mpesa/close-day', data),
+  reconciliation: () => client.get('/mpesa/reconciliation'),
+  setupCapital: (data) => client.post('/mpesa/capital', data),
+  reopenDay: (reason) => client.post('/mpesa/reopen-day', null, { params: { reason } }),
 }
 
 export const financeApi = {
